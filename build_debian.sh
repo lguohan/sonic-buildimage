@@ -120,7 +120,7 @@ sudo dpkg --root=$FILESYSTEM_ROOT -i target/debs/initramfs-tools_*.deb || \
 sudo dpkg --root=$FILESYSTEM_ROOT -i target/debs/linux-image-${LINUX_KERNEL_VERSION}-amd64_*.deb || \
     sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
 
-## Update initramfs for booting with squashfs+aufs
+## Update initramfs for booting with squashfs+overlay
 cat files/initramfs-tools/modules | sudo tee -a $FILESYSTEM_ROOT/etc/initramfs-tools/modules > /dev/null
 
 ## Hook into initramfs: change fs type from vfat to ext4 on arista switches
@@ -149,6 +149,7 @@ sudo cp files/initramfs-tools/varlog $FILESYSTEM_ROOT/etc/initramfs-tools/script
 sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/scripts/init-bottom/varlog
 sudo cp files/initramfs-tools/union-fsck $FILESYSTEM_ROOT/etc/initramfs-tools/hooks/union-fsck
 sudo chmod +x $FILESYSTEM_ROOT/etc/initramfs-tools/hooks/union-fsck
+pushd $FILESYSTEM_ROOT/usr/share/initramfs-tools/scripts/init-bottom && sudo patch -p1 < $OLDPWD/files/initramfs-tools/udev.patch; popd
 sudo chroot $FILESYSTEM_ROOT update-initramfs -u
 
 ## Install latest intel igb driver
@@ -259,7 +260,7 @@ sudo sed -i '
     ' $FILESYSTEM_ROOT/etc/monit/monitrc
 
 sudo tee -a $FILESYSTEM_ROOT/etc/monit/monitrc > /dev/null <<'EOF'
-check filesystem root-aufs with path /
+check filesystem root-overlay with path /
   if space usage > 90% for 5 times within 10 cycles then alert
 check system $HOST
   if memory usage > 90% for 5 times within 10 cycles then alert
