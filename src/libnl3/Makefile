@@ -18,7 +18,7 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	rm -rf ./libnl3
 	git clone https://anonscm.debian.org/git/collab-maint/libnl3.git
 	pushd ./libnl3
-	git checkout -f b77c0e49cb
+	git checkout -f 3e11301
 
 	# Patch
 	export QUILT_PATCHES=debian/patches
