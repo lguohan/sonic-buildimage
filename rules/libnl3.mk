@@ -1,6 +1,6 @@
 # libnl3
 
-LIBNL3_VERSION = 3.2.27-1
+LIBNL3_VERSION = 3.2.27-2
 
 export LIBNL3_VERSION
 
