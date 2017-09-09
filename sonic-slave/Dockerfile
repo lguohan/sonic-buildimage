@@ -221,7 +221,9 @@ RUN apt-get update && apt-get install -y \
         python3-docutils \
         python3-requests \
         python3-pytest \
-        python3-colorama
+        python3-colorama \
+# For initramfs
+        bash-completion
 
 # For linux build
 RUN apt-get -y build-dep linux
