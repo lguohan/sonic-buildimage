@@ -217,7 +217,9 @@ RUN apt-get update && apt-get install -y \
         linuxdoc-tools \
         lynx \
         texlive-latex-extra \
-        texlive-latex-recommended
+        texlive-latex-recommended \
+# For initramfs
+        bash-completion
 
 # For linux build
 RUN apt-get -y build-dep linux
