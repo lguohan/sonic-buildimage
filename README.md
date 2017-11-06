@@ -30,19 +30,12 @@ Please refer to [SONiC roadmap](https://github.com/Azure/SONiC/wiki/Sonic-Roadma
 ## Clone or fetch the code repository with all git submodules
 To clone the code repository recursively, assuming git version 1.9 or newer:
 
-    git clone --recursive https://github.com/Azure/sonic-buildimage.git
+    git clone https://github.com/lguohan/sonic-buildimage
+    git checkout stretch
+    git submodule update --recursive
+    git submodule foreach --recursive '[ -f .git ] && echo "gitdir: $(realpath --relative-to=. $(cut -d" " -f2 .git))" > .git'
 
 ## Usage
-
-To build SONiC installer image and docker images, run the following commands:
-
-    # Execute make init once after cloning the repo, or fetched remote repo with submodule updates
-    make init
-
-    # Execute make configure once to configure ASIC
-    make configure PLATFORM=[ASIC_VENDOR]
-
-    make
 
  **NOTE**: We recommend reserving 50G free space to build one platform.
     
@@ -59,10 +52,9 @@ The SONiC installer contains all docker images needed. SONiC uses one image for 
 For Broadcom ASIC, we build ONIE and EOS image. EOS image is used for Arista devices, ONIE image is used for all other Broadcom ASIC based devices. 
 
     make configure PLATFORM=broadcom
+    BLDENV=stretch make target/debs/linux-headers-4.9.0-3-common_4.9.30-2+deb9u5_all.deb target/debs/igb.ko
     # build ONIE image
     make target/sonic-broadcom.bin
-    # build EOS image
-    make target/sonic-aboot-broadcom.swi
  
 You may find the rules/config file useful. It contains configuration options for the build process, like adding more verbosity or showing dependencies, username and password for base image etc.
 
