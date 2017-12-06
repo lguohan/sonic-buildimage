@@ -26,8 +26,6 @@ src/thrift/*
 !src/thrift/Makefile
 src/sonic-device-data/src/device/
 src/sonic-device-data/src/debian/
-src/igb/*
-!src/igb/Makefile
 src/mpdecimal/*
 !src/mpdecimal/Makefile
 src/python3/*
