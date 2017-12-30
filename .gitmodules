@@ -69,3 +69,6 @@
 [submodule "platform/p4/SAI-P4-BM"]
 	path = platform/p4/SAI-P4-BM
 	url = https://github.com/Mellanox/SAI-P4-BM.git
+[submodule "platform/mellanox/hw-management"]
+	path = platform/mellanox/hw-management
+	url = https://github.com/Mellanox/hw-mgmt/
