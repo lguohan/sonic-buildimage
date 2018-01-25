@@ -4,11 +4,10 @@ SHELL = /bin/bash
 
 MFT_NAME = mft-4.8.0-26-x86_64-deb
 MFT_TGZ = $(MFT_NAME).tgz
-KERNELVER = 4.9.0-5-amd64
 SRC_DEB = kernel-mft-dkms_4.8.0-26_all.deb
 
 MAIN_TARGET = mft-4.8.0-26.amd64.deb
-DERIVED_TARGETS = kernel-mft-dkms_4.8.0-4.9.0-5-amd64_all.deb
+DERIVED_TARGETS = kernel-mft-dkms_4.8.0-$(KVERSION)_all.deb
 
 $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	rm -rf $(MFT_NAME)
@@ -23,7 +22,7 @@ $(addprefix $(DEST)/, $(MAIN_TARGET)): $(DEST)/% :
 	fi
 	done
 
-	tar xvf `sudo dkms mkdriverdisk kernel-mft-dkms/4.8.0 -a all -d ubuntu -k $(KERNELVER) --media tar | grep "Disk image location" | cut -d':' -f2`
+	tar xvf `sudo dkms mkdriverdisk kernel-mft-dkms/4.8.0 -a all -d ubuntu -k $(KVERSION) --media tar | grep "Disk image location" | cut -d':' -f2`
 	popd
 
 	# fix timestamp because we do not actually build tools, only kernel
