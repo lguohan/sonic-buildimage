@@ -7,3 +7,5 @@ SONIC_MAKE_DEBS += $(MFT)
 
 KERNEL_MFT = kernel-mft-dkms_4.8.0-$(KVERSION)_all.deb
 $(eval $(call add_derived_package,$(MFT),$(KERNEL_MFT)))
+
+SONIC_STRETCH_DEBS += $(KERNEL_MFT)
