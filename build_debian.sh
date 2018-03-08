@@ -304,7 +304,10 @@ set /files/etc/sysctl.conf/net.core.rmem_max 2097152
 " -r $FILESYSTEM_ROOT
 
 ## docker-py is needed by Ansible docker module
-sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT easy_install pip
+# sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT easy_install pip
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT curl -o pip-9.0.1.tar.gz "https://pypi.python.org/packages/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/pip-9.0.1.tar.gz#md5=35f01da33009719497f01a4ba69d63c9"
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT easy_install pip-9.0.1.tar.gz
+sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT rm pip-9.0.1.tar.gz
 sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip install 'docker-py==1.6.0'
 ## Note: keep pip installed for maintainance purpose
 
