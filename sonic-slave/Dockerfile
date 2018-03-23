@@ -217,7 +217,9 @@ RUN apt-get update && apt-get install -y \
         linuxdoc-tools \
         lynx \
         texlive-latex-extra \
-        texlive-latex-recommended
+        texlive-latex-recommended \
+# For initramfs
+        bash-completion
 
 # For linux build
 RUN apt-get -y build-dep linux
@@ -248,6 +250,12 @@ RUN pip install meld3 mock
 
 # Install dependencies for isc-dhcp-relay build
 RUN apt-get -y build-dep isc-dhcp
+
+# Install vim
+RUN apt-get install -y vim
+
+# Install rsyslog
+RUN apt-get install -y rsyslog
 
 RUN cd /usr/src/gtest && cmake . && make -C /usr/src/gtest
 

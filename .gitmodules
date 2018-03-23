@@ -3,7 +3,8 @@
 	url = https://github.com/Azure/sonic-swss-common
 [submodule "sonic-linux-kernel"]
 	path = src/sonic-linux-kernel
-	url = https://github.com/Azure/sonic-linux-kernel
+	url = https://github.com/lguohan/sonic-linux-kernel
+	branch = stretch
 [submodule "sonic-sairedis"]
 	path = src/sonic-sairedis
 	url = https://github.com/Azure/sonic-sairedis
@@ -26,9 +27,6 @@
 [submodule "src/sonic-py-swsssdk"]
 	path = src/sonic-py-swsssdk
 	url = https://github.com/Azure/sonic-py-swsssdk.git
-[submodule "src/lldpd"]
-	path = src/lldpd
-	url = https://github.com/vincentbernat/lldpd.git
 [submodule "src/sonic-snmpagent"]
 	path = src/sonic-snmpagent
 	url = https://github.com/Azure/sonic-snmpagent
@@ -40,13 +38,15 @@
 	url = https://github.com/Azure/sonic-utilities
 [submodule "platform/broadcom/sonic-platform-modules-s6000"]
 	path = platform/broadcom/sonic-platform-modules-s6000
-	url = https://github.com/Azure/sonic-platform-modules-s6000
+	url = https://github.com/lguohan/sonic-platform-modules-s6000
+	branch = stretch
 [submodule "platform/broadcom/sonic-platform-modules-arista"]
 	path = platform/broadcom/sonic-platform-modules-arista
 	url = https://github.com/aristanetworks/sonic
 [submodule "platform/broadcom/sonic-platform-modules-dell"]
 	path = platform/broadcom/sonic-platform-modules-dell
-	url = https://github.com/Azure/sonic-platform-modules-dell
+	url = https://github.com/lguohan/sonic-platform-modules-dell
+	branch = stretch
 [submodule "platform/broadcom/sonic-platform-modules-ingrasys"]
 	path = platform/broadcom/sonic-platform-modules-ingrasys
 	url = https://github.com/Ingrasys-sonic/sonic-platform-modules-ingrasys
@@ -59,9 +59,6 @@
 [submodule "platform/broadcom/sonic-platform-modules-accton"]
 	path = platform/broadcom/sonic-platform-modules-accton
 	url = https://github.com/edge-core/sonic-platform-modules-accton.git
-[submodule "platform/broadcom/sonic-platform-modules-cel"]
-	path = platform/broadcom/sonic-platform-modules-cel
-	url = https://github.com/celestica-Inc/sonic-platform-modules-cel.git
 [submodule "src/sonic-frr/frr"]
 	path = src/sonic-frr/frr
 	url = https://github.com/FRRouting/frr.git
@@ -77,4 +74,9 @@
 [submodule "platform/broadcom/sonic-platform-modules-quanta"]
 	path = platform/broadcom/sonic-platform-modules-quanta
 	url = https://github.com/QuantaSwitchONIE/sonic-platform-modules-quanta.git
-
+[submodule "platform/broadcom/sonic-platform-modules-mitac"]
+	path = platform/broadcom/sonic-platform-modules-mitac
+	url = https://github.com/MiTAC-EBU/sonic-platform-modules-mitac.git
+[submodule "platform/mellanox/hw-management"]
+	path = platform/mellanox/hw-management
+	url = https://github.com/Mellanox/hw-mgmt/

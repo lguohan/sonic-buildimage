@@ -406,11 +406,11 @@ if [ "$install_env" = "onie" ]; then
     
 elif [ "$install_env" = "sonic" ]; then
     demo_mnt="/host"
-    running_sonic_revision=$(cat /etc/sonic/sonic_version.yml | grep build_version | cut -f2 -d" ")
+    eval running_sonic_revision=$(cat /etc/sonic/sonic_version.yml | grep build_version | cut -f2 -d" ")
     # Prevent installing existing SONiC if it is running
     if [ "$image_dir" = "image-$running_sonic_revision" ]; then
-        echo "Error: Unable to install SONiC version $running_sonic_revision. Running SONiC has the same version"
-        exit 1
+        echo "Not installing SONiC version $running_sonic_revision, as current running SONiC has the same version"
+        exit 0
     fi
     # Remove extra SONiC images if any
     for f in $demo_mnt/image-* ; do
@@ -452,7 +452,13 @@ unzip -op $ONIE_INSTALLER_PAYLOAD "$FILESYSTEM_DOCKERFS" | tar xz $TAR_EXTRA_OPT
 
 if [ "$install_env" = "onie" ]; then
     # Store machine description in target file system
-    cp /etc/machine.conf $demo_mnt
+    if [ -f /etc/machine-build.conf ]; then
+        # onie_ variable are generate at runtime.
+        # they are no longer hardcoded in /etc/machine.conf
+        set | grep ^onie_ > $demo_mnt/machine.conf
+    else
+        cp /etc/machine.conf $demo_mnt
+    fi
 
     # Store installation log in target file system
     rm -f $onie_initrd_tmp/tmp/onie-support*.tar.bz2
@@ -549,11 +555,12 @@ menuentry '$demo_grub_entry' {
         if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
         insmod part_msdos
         insmod ext2
-        linux   /$image_dir/boot/vmlinuz-3.16.0-5-amd64 root=$grub_cfg_root rw $GRUB_CMDLINE_LINUX  \
+        linux   /$image_dir/boot/vmlinuz-4.9.0-5-amd64 root=$grub_cfg_root rw $GRUB_CMDLINE_LINUX  \
+                net.ifnames=0 biosdevname=0 \
                 loop=$image_dir/$FILESYSTEM_SQUASHFS loopfstype=squashfs                       \
                 apparmor=1 security=apparmor varlog_size=$VAR_LOG_SIZE usbcore.autosuspend=-1 $ONIE_PLATFORM_EXTRA_CMDLINE_LINUX
         echo    'Loading $demo_volume_label $demo_type initial ramdisk ...'
-        initrd  /$image_dir/boot/initrd.img-3.16.0-5-amd64
+        initrd  /$image_dir/boot/initrd.img-4.9.0-5-amd64
 }
 EOF
 
