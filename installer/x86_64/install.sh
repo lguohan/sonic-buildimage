@@ -65,9 +65,9 @@ fi
 echo "onie_platform: $onie_platform"
 
 # default console settings
-CONSOLE_PORT=0x3f8
-CONSOLE_DEV=0
-CONSOLE_SPEED=9600
+CONSOLE_PORT=0x2f8
+CONSOLE_DEV=1
+CONSOLE_SPEED=115200
 
 # Get platform specific linux kernel command line arguments
 ONIE_PLATFORM_EXTRA_CMDLINE_LINUX=""

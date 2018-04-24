@@ -21,7 +21,7 @@ def get_machine_info():
             tokens = line.split('=')
             if len(tokens) < 2:
                 continue
-            machine_vars[tokens[0]] = tokens[1].strip()
+            machine_vars[tokens[0]] = tokens[1].strip().strip("'")
     return machine_vars
 
 def get_platform_info(machine_info):
