@@ -76,7 +76,7 @@
 	url = https://github.com/QuantaSwitchONIE/sonic-platform-modules-quanta.git
 [submodule "platform/broadcom/sonic-platform-modules-mitac"]
 	path = platform/broadcom/sonic-platform-modules-mitac
-	url = https://github.com/MiTAC-EBU/sonic-platform-modules-mitac.git
+	url = https://github.com/MiTAC-EBU/sonic-platform-modules-mitac_stretch.git
 [submodule "platform/mellanox/hw-management"]
 	path = platform/mellanox/hw-management
 	url = https://github.com/Mellanox/hw-mgmt/
