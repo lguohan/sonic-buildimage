@@ -5,7 +5,12 @@
 
 #include "system_cpld_reg.h"
 #include "system_cpld_sysfs.h"
-#ifdef CONFIG_DRV_SYSCPLD_WDT
+
+#define MIC_DEBUG_TAG  " [mitac] "
+#define MITAC_WDT_MINOR  135
+#define MITAC_WDT_NAME   "watchdog5"
+
+#if CONFIG_DRV_SYSCPLD_WDT
 #include <linux/fs.h>
 #include <linux/ioctl.h>
 #include <linux/miscdevice.h>
@@ -33,7 +38,6 @@ MODULE_DEVICE_TABLE(i2c, system_cpld_ids);
 static int system_cpld_raw_read(struct device *dev, struct device_attribute *attr, char *buf,
     int reg_offset, int reg_width, int fld_shift, int fld_width, int fld_mask, char* reg_name){
     unsigned int reg_val = 0, fld_val;
-    static int debug_flag;
     struct system_cpld_data *data = dev_get_drvdata(dev);
     struct i2c_client *client = data->client;
     int err;
@@ -64,7 +68,6 @@ static int system_cpld_raw_write(struct device *dev, struct device_attribute *at
     int ret_code;
     unsigned int reg_val, fld_val;
     unsigned long val;
-    static int debug_flag;
     struct system_cpld_data *data = dev_get_drvdata(dev);
     struct i2c_client *client = data->client;
     if (reg_width != 8){
@@ -192,7 +195,7 @@ static const struct attribute_group system_cpld_group_misc = {
     .attrs = misc_attributes,
 };
 
-#ifdef CONFIG_DRV_SYSCPLD_WDT
+#if CONFIG_DRV_SYSCPLD_WDT
 /*
  *****************************************************************************
  *
@@ -276,9 +279,9 @@ static void wdt_set_timeout(int index)
 {
     struct device *dev = &system_cpld->client->dev;
     struct device_attribute *fake_attr=NULL;
-    char buf[1];
+    char buf[16];
     if ( WD_TIMO_MAX_NUM == 16 ) {
-        sprintf(buf,"%x",index);
+        snprintf(buf, 16, "%x",index);
         system_cpld_wd_timer_raw_write(dev, fake_attr, buf, (size_t)0);
     }
     else
@@ -390,7 +393,7 @@ static long wdt_unlocked_ioctl(struct file *file, unsigned int cmd,
  */
 static int wdt_open(struct inode *inode, struct file *file)
 {
-    if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
+    if (MINOR(inode->i_rdev) == MITAC_WDT_MINOR) {
         if (test_and_set_bit(0, &wdt_is_open)) {
             return -EBUSY;
         }
@@ -412,7 +415,7 @@ static int wdt_open(struct inode *inode, struct file *file)
  */
 static int wdt_release(struct inode *inode, struct file *file)
 {
-    if (MINOR(inode->i_rdev) == WATCHDOG_MINOR)
+    if (MINOR(inode->i_rdev) == MITAC_WDT_MINOR)
         clear_bit(0, &wdt_is_open);
     return 0;
 }
@@ -447,8 +450,8 @@ static const struct file_operations wdt_fops = {
 };
 
 static struct miscdevice wdt_dev = {
-    .minor = WATCHDOG_MINOR,
-    .name = "watchdog",
+    .minor = MITAC_WDT_MINOR,
+    .name =  MITAC_WDT_NAME,
     .fops = &wdt_fops,
 };
 
@@ -459,6 +462,8 @@ static struct miscdevice wdt_dev = {
 static struct notifier_block wdt_notifier = {
     .notifier_call = wdt_notify_sys,
 };
+static struct notifier_block *p_wdt_notifier = NULL;
+
 #endif /* CONFIG_DRV_SYSCPLD_WDT */
 
 static int system_cpld_probe(struct i2c_client *client, const struct i2c_device_id *id)
@@ -483,14 +488,22 @@ static int system_cpld_probe(struct i2c_client *client, const struct i2c_device_
 
     printk(KERN_INFO "%s: System CPLD LCMXO3LF created.\n", __FUNCTION__);
 
-#ifdef CONFIG_DRV_SYSCPLD_WDT
+#if CONFIG_DRV_SYSCPLD_WDT
+    wdt_dev.minor = MITAC_WDT_MINOR;
     err = misc_register(&wdt_dev);
-    if (err)
-        return err;
-    err = register_reboot_notifier(&wdt_notifier);
     if (err) {
-        misc_deregister(&wdt_dev);
-        return err;
+        printk(MIC_DEBUG_TAG"%s-%d misc_register register watchdog (%s : %d) fail err=%d \n", __FUNCTION__, __LINE__, wdt_dev.name, wdt_dev.minor, err);
+        wdt_dev.minor = 0;
+    }
+    else {
+        p_wdt_notifier = &wdt_notifier;
+        err = register_reboot_notifier(p_wdt_notifier);
+        if (err) {
+            printk(MIC_DEBUG_TAG"%s-%d register_reboot_notifier fail err:%d \n", __FUNCTION__, __LINE__, err);
+            misc_deregister(&wdt_dev);
+            p_wdt_notifier = NULL;
+            wdt_dev.minor = 0;
+        }
     }
     printk(KERN_INFO "%s: System CPLD watchdog created.\n", __FUNCTION__);
 #endif
@@ -501,9 +514,9 @@ static int system_cpld_probe(struct i2c_client *client, const struct i2c_device_
 
 static int system_cpld_remove(struct i2c_client *client)
 {
-#ifdef CONFIG_DRV_SYSCPLD_WDT
-    misc_deregister(&wdt_dev);
-    unregister_reboot_notifier(&wdt_notifier);
+#if CONFIG_DRV_SYSCPLD_WDT
+    if(p_wdt_notifier) unregister_reboot_notifier(p_wdt_notifier);
+    if(wdt_dev.minor)  misc_deregister(&wdt_dev);
 #endif
     sysfs_remove_group(&client->dev.kobj, &system_cpld_group_misc);
 

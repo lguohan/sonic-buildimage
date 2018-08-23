@@ -1,0 +1,14 @@
+[Unit]
+Description=Mitac ly1200_32x platform initialization service
+Before=pmon.service
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+ExecStart=/etc/init.d/sonic-platform-mitac-ly1200-32x start
+ExecStop=/etc/init.d/sonic-platform-mitac-ly1200-32x stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+

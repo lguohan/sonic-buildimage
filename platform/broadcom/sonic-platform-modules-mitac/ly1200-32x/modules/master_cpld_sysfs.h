@@ -8,7 +8,7 @@ struct device_attribute field  \
 
 #define SYSFS_RAW_RW_ATTR_DEF(field)  \
 struct device_attribute field  \
-    = __ATTR(field, S_IRUGO | S_IWUGO, master_cpld_##field##_raw_read, master_cpld_##field##_raw_write);
+    = __ATTR(field, S_IRUGO | S_IWUSR | S_IWGRP, master_cpld_##field##_raw_read, master_cpld_##field##_raw_write);
 
 #define SYSFS_MISC_RO_ATTR_DEF(field, _read)  \
 struct device_attribute field  \
@@ -16,7 +16,7 @@ struct device_attribute field  \
 
 #define SYSFS_MISC_RW_ATTR_DEF(field, _read, _write)  \
 struct device_attribute field  \
-    = __ATTR(field, S_IRUGO | S_IWUGO, _read, _write);
+    = __ATTR(field, S_IRUGO | S_IWUSR | S_IWGRP, _read, _write);
 
 #define SYSFS_ATTR_PTR(field)  \
 &field.attr

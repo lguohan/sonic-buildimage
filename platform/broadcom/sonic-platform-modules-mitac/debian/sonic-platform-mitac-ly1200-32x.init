@@ -13,6 +13,11 @@
 
 case "$1" in
 start)
+    eval sonic_version=$(cat /etc/sonic/sonic_version.yml | grep build_version | cut -f2 -d" ")
+    if [ -f /host/image-$sonic_version/platform/firsttime ]; then
+        update-rc.d xcvr_servd defaults >/dev/null
+    fi
+
     echo -n "Setting up board... "
 
     echo 0 > /proc/sys/kernel/perf_cpu_time_max_percent

@@ -10,7 +10,7 @@ WATCHDOG_PRINT=0
 while [ 1 ]
 do
     if [ `dpkg -l |grep -c "watchdog "` -eq "0" ]; then
-        dpkg -i /opt/debs/watchdog_5.14-3_amd64.deb
+        dpkg -i /opt/debs/watchdog_5.15-2_amd64.deb
         if [ "$?" -ne "0" ]; then
             if [ $WATCHDOG_PRINT -eq 0 ]; then
                 WATCHDOG_PRINT=1
