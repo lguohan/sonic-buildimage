@@ -1,3 +1,9 @@
+opennsl (3.5.0.1-1) unstable; urgency=medium
+
+  * Upgrade to opennsl 3.5.0.1
+
+ -- Guohan Lu <gulv@microsoft.com>  Thu, 04 Oct 2018 07:22:27 +0000
+
 opennsl (3.4.1.11-1) unstable; urgency=medium
 
   * Port Broadcom SAI 3.4.1.11
