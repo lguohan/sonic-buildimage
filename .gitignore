@@ -112,6 +112,7 @@ src/thrift/*
 sonic-slave/Dockerfile
 sonic-slave-stretch/Dockerfile
 sonic-slave-jessie/Dockerfile
+sonic-slave-buster/Dockerfile
 dockers/docker-base/Dockerfile
 dockers/docker-base-stretch/Dockerfile
 dockers/docker-config-engine/Dockerfile
