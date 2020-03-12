@@ -8,7 +8,7 @@ export MFT_VERSION MFT_REVISION
 MFT = mft_$(MFT_VERSION)-$(MFT_REVISION)_amd64.deb
 $(MFT)_SRC_PATH = $(PLATFORM_PATH)/mft
 $(MFT)_DEPENDS += $(LINUX_HEADERS) $(LINUX_HEADERS_COMMON)
-SONIC_DPKG_DEBS += $(MFT)
+SONIC_MAKE_DEBS += $(MFT)
 
 KERNEL_MFT = kernel-mft-dkms_$(MFT_VERSION)-$(KVERSION)_all.deb
 $(eval $(call add_derived_package,$(MFT),$(KERNEL_MFT)))
