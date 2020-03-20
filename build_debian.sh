@@ -276,7 +276,8 @@ sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y in
     ndisc6                  \
     makedumpfile            \
     conntrack               \
-    cron
+    cron                    \
+    haveged
 
 
 if [[ $CONFIGURED_ARCH == amd64 ]]; then
