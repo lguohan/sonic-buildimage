@@ -400,7 +400,7 @@ sudo LANG=C chroot $FILESYSTEM_ROOT docker $SONIC_NATIVE_DOCKERD_FOR_DOCKERFS ta
 sudo LANG=C chroot $FILESYSTEM_ROOT docker $SONIC_NATIVE_DOCKERD_FOR_DOCKERFS tag {{imagename}}:latest {{imagebasename}}:latest
 {% endif %}
 {% endfor %}
-sudo umount $FILESYSTEM_ROOT/target
+sudo LANG=C chroot $FILESYSTEM_ROOT umount target
 sudo rm -r $FILESYSTEM_ROOT/target
 if [[ $CONFIGURED_ARCH == armhf || $CONFIGURED_ARCH == arm64 ]]; then
     sudo umount $FILESYSTEM_ROOT/dockerfs
