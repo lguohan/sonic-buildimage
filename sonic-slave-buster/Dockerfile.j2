@@ -312,9 +312,6 @@ RUN sudo augtool --autosave "set /files/etc/dpkg/dpkg.cfg/force-confdef"
 ## do not modify the current configuration file, the new version is installed with a .dpkg-dist suffix
 RUN sudo augtool --autosave "set /files/etc/dpkg/dpkg.cfg/force-confold"
 
-# For smartmontools 6.6-1
-RUN apt-get -t buster-backports install -y debhelper
-
 # For linux build
 RUN apt-get -y build-dep linux
 
