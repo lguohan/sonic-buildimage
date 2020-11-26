@@ -10,6 +10,9 @@ pool:
   vmImage: 'ubuntu-20.04'
 
 steps:
+- checkout: self
+  submodules: recursive
+
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
