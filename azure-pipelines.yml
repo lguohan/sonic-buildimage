@@ -96,6 +96,29 @@ stages:
       displayName: "Archive sonic image"
 
   - job:
+    displayName: "marvell.armhf"
+    timeoutInMinutes: 3600
+    steps:
+    - checkout: self
+      submodules: recursive
+      displayName: 'Checkout code'
+
+    - script: |
+        sudo modprobe overlay
+        sudo apt-get install -y acl
+        export DOCKER_DATA_ROOT_FOR_MULTIARCH=/data/march/docker
+        ENABLE_DOCKER_BASE_PULL=y make configure PLATFORM=marvell-armhf PLATFORM_ARCH=armhf
+        CACHE_OPTIONS="SONIC_DPKG_CACHE_METHOD=rcache SONIC_DPKG_CACHE_SOURCE=/nfs/dpkg_cache/marvell-armhf"
+        make USERNAME=admin SONIC_BUILD_JOBS=$(nproc) $CACHE_OPTIONS target/sonic-marvell-armhf.bin
+      displayName: 'Build sonic image'
+    - script: |
+        sudo rm -rf fsroot dockerfs
+      displayName: 'Clean up build artifacts'
+    - publish: $(System.DefaultWorkingDirectory)/
+      artifact: sonic-buildimage.marvell.armhf
+      displayName: "Archive sonic image"
+
+  - job:
     displayName: "kvm"
     timeoutInMinutes: 600
     steps:
