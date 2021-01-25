@@ -1,4 +1,4 @@
-FROM docker-base
+FROM {{ docker_config_engine_load_image }}
 
 ## Make apt-get non-interactive
 ENV DEBIAN_FRONTEND=noninteractive

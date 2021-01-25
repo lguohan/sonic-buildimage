@@ -1,4 +1,4 @@
-FROM docker-ptf
+FROM {{ docker_ptf_saithrift_load_image }}
 
 ## Make apt-get non-interactive
 ENV DEBIAN_FRONTEND=noninteractive

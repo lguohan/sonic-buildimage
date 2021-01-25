@@ -1,5 +1,5 @@
 {% from "dockers/dockerfile-macros.j2" import install_debian_packages, install_python_wheels, copy_files %}
-FROM docker-base-buster
+FROM {{ docker_config_engine_buster_load_image }}
 
 ## Make apt-get non-interactive
 ENV DEBIAN_FRONTEND=noninteractive

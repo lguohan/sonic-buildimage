@@ -166,3 +166,7 @@ sudo mount -t overlay overlay -olowerdir=/var/lib/dpkg,upperdir=$$upperdir,workd
 export SONIC_DPKG_ADMINDIR=$$mergedir
 trap "sudo umount $$mergedir && rm -rf $$mergedir $$upperdir $$workdir" EXIT
 endef
+
+TO_LOWER = $(shell echo $(1) | tr '[:upper:]' '[:lower:]')
+TO_UPPER = $(shell echo $(1) | tr  '[:lower:]' '[:upper:]')
+

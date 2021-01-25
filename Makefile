@@ -12,6 +12,7 @@ ifeq ($(NOSTRETCH), 0)
 	EXTRA_DOCKER_TARGETS=$(notdir $@) BLDENV=stretch make -f Makefile.work stretch
 endif
 	BLDENV=buster make -f Makefile.work $@
+	BLDENV=buster make -f Makefile.work docker-cleanup
 
 jessie:
 	@echo "+++ Making $@ +++"
@@ -29,7 +30,7 @@ init:
 	@echo "+++ Making $@ +++"
 	make -f Makefile.work $@
 
-clean configure reset showtag sonic-slave-build sonic-slave-bash :
+clean configure reset docker-cleanup showtag sonic-slave-build sonic-slave-bash :
 	@echo "+++ Making $@ +++"
 ifeq ($(NOJESSIE), 0)
 	make -f Makefile.work $@
