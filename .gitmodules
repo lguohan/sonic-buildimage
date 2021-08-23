@@ -94,3 +94,6 @@
 [submodule "platform/broadcom/sonic-platform-modules-nokia"]
 	path = platform/broadcom/sonic-platform-modules-nokia
 	url = https://github.com/nokia/sonic-platform.git
+[submodule "platform/bluefield-arm64/bfscripts"]
+	path = platform/bluefield-arm64/bfscripts
+	url = https://github.com/Mellanox/bfscripts
