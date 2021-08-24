@@ -1,0 +1,3 @@
+# DPKG FRK
+
+include $(PLATFORM_PATH)/bfscripts.dep

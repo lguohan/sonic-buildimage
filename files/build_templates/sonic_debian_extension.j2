@@ -869,6 +869,18 @@ sudo https_proxy=$https_proxy LANG=C chroot $FILESYSTEM_ROOT pip3 install $MLNX_
 sudo rm -rf $FILESYSTEM_ROOT/$MLNX_SONIC_PLATFORM_PY3_WHEEL_NAME
 {% endif %}
 
+{% if sonic_asic_platform == "bluefield" %}
+sudo mkdir -p $FILESYSTEM_ROOT/lib/modules/{{kversion}}/kernel/extra
+sudo cp $files_path/$MLXBF_GIGE_DRIVER $FILESYSTEM_ROOT/lib/modules/{{kversion}}/kernel/extra
+sudo cp $files_path/$MLXBF2_GPIO_DRIVER $FILESYSTEM_ROOT/lib/modules/{{kversion}}/kernel/extra
+sudo cp $files_path/$TMFIFO_DRIVER $FILESYSTEM_ROOT/lib/modules/{{kversion}}/kernel/extra
+
+## Run depmod command for target kernel modules
+sudo LANG=C chroot $FILESYSTEM_ROOT depmod -a {{kversion}}
+sudo dpkg --root=$FILESYSTEM_ROOT -i $debs_path/mlxbf-scripts_*.deb || \
+    sudo LANG=C DEBIAN_FRONTEND=noninteractive chroot $FILESYSTEM_ROOT apt-get -y install -f
+{% endif %}
+
 {%- if SONIC_ROUTING_STACK == "frr" %}
 sudo mkdir $FILESYSTEM_ROOT/etc/sonic/frr
 sudo touch $FILESYSTEM_ROOT/etc/sonic/frr/frr.conf
