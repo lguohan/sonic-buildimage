@@ -1,8 +1,43 @@
+import shutil
+import os
+import glob
+import jinja2
 from setuptools import setup, find_packages
+from setuptools.command.build_py import build_py
 
 # read me
 with open('README.rst') as readme_file:
     readme = readme_file.read()
+
+class my_build_py(build_py):
+    def run(self):
+        if not self.dry_run:
+            print("hehe")
+
+        if not os.path.exists("./yang-models"):
+            os.makedirs("./yang-models")
+
+        if not os.path.exists("./iyang-models"):
+            os.makedirs("./iyang-models")
+
+        # copy non-template yang model to internal yang model directory
+        for fname in glob.glob("./yang-models/*.yang"):
+            bfname = os.path.basename(fname)
+            shutil.copyfile("./yang-models/{}".format(bfname), "./iyang-models/{}".format(bfname))
+
+        # templated yang models
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader('./yang-templates/'), trim_blocks=True)
+        for fname in glob.glob("./yang-templates/*.yang.j2"):
+            bfname = os.path.basename(fname)
+            template = env.get_template(bfname)
+            yang_model = template.render(yang_model_type="ext")
+            iyang_model = template.render(yang_model_type="int")
+            with open("./yang-models/{}".format(bfname.strip(".j2")), 'w') as f:
+                f.write(yang_model)
+            with open("./iyang-models/{}".format(bfname.strip(".j2")), 'w') as f:
+                f.write(iyang_model)
+
+        build_py.run(self)
 
 setup(
     author="lnos-coders",
@@ -40,6 +75,7 @@ setup(
     py_modules=[],
     packages=find_packages(),
     version='1.0',
+    cmdclass={'build_py': my_build_py},
     data_files=[
         ('yang-models', ['./yang-models/sonic-acl.yang',
                          './yang-models/sonic-bgp-common.yang',
@@ -72,6 +108,38 @@ setup(
                          './yang-models/sonic-vlan.yang',
                          './yang-models/sonic-vrf.yang',
                          './yang-models/sonic_yang_tree']),
+        ('iyang-models', ['./iyang-models/sonic-acl.yang',
+                         './iyang-models/sonic-bgp-common.yang',
+                         './iyang-models/sonic-bgp-global.yang',
+                         './iyang-models/sonic-bgp-neighbor.yang',
+                         './iyang-models/sonic-bgp-peergroup.yang',
+                         './iyang-models/sonic-breakout_cfg.yang',
+                         './iyang-models/sonic-copp.yang',
+                         './iyang-models/sonic-crm.yang',
+                         './iyang-models/sonic-device_metadata.yang',
+                         './iyang-models/sonic-device_neighbor.yang',
+                         './iyang-models/sonic-extension.yang',
+                         './iyang-models/sonic-flex_counter.yang',
+                         './iyang-models/sonic-interface.yang',
+                         './iyang-models/sonic-loopback-interface.yang',
+                         './iyang-models/sonic-mgmt_interface.yang',
+                         './iyang-models/sonic-mgmt_port.yang',
+                         './iyang-models/sonic-mgmt_vrf.yang',
+                         './iyang-models/sonic-ntp.yang',
+                         './iyang-models/sonic-nat.yang',
+                         './iyang-models/sonic-port.yang',
+                         './iyang-models/sonic-portchannel.yang',
+                         './iyang-models/sonic-route-common.yang',
+                         './iyang-models/sonic-route-map.yang',
+                         './iyang-models/sonic-routing-policy-sets.yang',
+                         './iyang-models/sonic-system-aaa.yang',
+                         './iyang-models/sonic-system-tacacs.yang',
+                         './iyang-models/sonic-types.yang',
+                         './iyang-models/sonic-versions.yang',
+                         './iyang-models/sonic-vlan.yang',
+                         './iyang-models/sonic-vrf.yang',
+                         './iyang-models/sonic_yang_tree']),
+
     ],
     zip_safe=False,
 )
