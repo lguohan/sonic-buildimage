@@ -4,6 +4,9 @@ FROM docker-config-engine-bookworm-{{DOCKER_USERNAME}}:{{DOCKER_USERTAG}}
 ## Make apt-get non-interactive
 ENV DEBIAN_FRONTEND=noninteractive
 
+## Setup the swss docker file template to ignore the vpp sysctl during installation
+ENV VPP_INSTALL_SKIP_SYSCTL=1
+
 RUN apt-get update
 
 RUN apt-get install iputils-ping
