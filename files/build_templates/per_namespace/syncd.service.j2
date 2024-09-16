@@ -27,9 +27,15 @@ After=nv-syncd-shared.service
 [Service]
 User=root
 Environment=sonic_asic_platform={{ sonic_asic_platform }}
+{% if sonic_asic_platform == 'vpp' %}
+ExecStartPre=/usr/local/bin/vpp_ports_setup.sh start
+{% endif %}
 ExecStartPre=/usr/local/bin/syncd.sh start{% if multi_instance == 'true' %} %i{% endif %}
 ExecStart=/usr/local/bin/syncd.sh wait{% if multi_instance == 'true' %} %i{% endif %}
 ExecStop=/usr/local/bin/syncd.sh stop{% if multi_instance == 'true' %} %i{% endif %}
+{% if sonic_asic_platform == 'vpp' %}
+ExecStopPost=/usr/local/bin/vpp_ports_setup.sh stop
+{% endif %}
 {% if sonic_asic_platform == 'mellanox' %}
 TimeoutStartSec=480
 {% endif %}
