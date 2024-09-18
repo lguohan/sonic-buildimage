@@ -33,6 +33,9 @@ include $(PLATFORM_PATH)/../template/docker-syncd-bookworm.mk
 $(DOCKER_SYNCD_BASE)_DEPENDS += $(SYNCD_VPP) \
                                 $(IPROUTE2)
 
+
+$(DOCKER_SYNCD_BASE)_PYTHON_WHEELS += $(SONIC_VPPCFGD)
+
 $(DOCKER_SYNCD_BASE)_DBG_DEPENDS += $(SYNCD_VPP_DBG) \
                                 $(LIBSWSSCOMMON_DBG) \
                                 $(LIBSAIMETADATA_DBG) \
